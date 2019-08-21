@@ -7,8 +7,8 @@ ipv=4
 function print_help {
 	echo "Parameters:
 	-c <country>    Default: all
-	-p <protocol>   http or https Default: https
-	-v <IP version> 4 or 6 Default: 4
+	-p <protocol>   http or https; Default: https
+	-v <IP version> 4 or 6; Default: 4
 	-h              Print help text"
 }
 
