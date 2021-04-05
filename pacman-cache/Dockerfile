@@ -1,5 +1,6 @@
 FROM archlinux
 
+RUN pacman -Tv
 RUN pacman -Sy squid --noconfirm
 
 COPY ./squid.conf /etc/squid/squid.conf
