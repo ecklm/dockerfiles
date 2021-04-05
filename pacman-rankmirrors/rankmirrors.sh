@@ -37,5 +37,5 @@ done
 
 set -v
 
-curl "https://www.archlinux.org/mirrorlist/?country=${country}&protocol=${proto}&ip_version=${ipv}" |\
+curl "https://archlinux.org/mirrorlist/?country=${country}&protocol=${proto}&ip_version=${ipv}" |\
          sed "s/^#//" | grep -v "#" | rankmirrors -n 10 -
