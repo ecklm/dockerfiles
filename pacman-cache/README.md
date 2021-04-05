@@ -9,7 +9,7 @@ either use the `http_proxy` environment variable or add the following option to
 your `/etc/pacman.conf` file.
 ```
 [options]
-XferCommand = /usr/bin/curl --proxy http://your-servers-ip:3128 -L --progress-bar --write-out "%{stderr}%{filename_effective}\n" -C - -f -o %o %u
+XferCommand = /usr/bin/curl --proxy http://your-servers-ip:3128 -L --progress-bar --write-out "%{stderr}%{url_effective} %{size_download} HTTP/%{http_version} %{response_code}\n" -C - -f -o %o %u
 ```
 
 ## Missing features
