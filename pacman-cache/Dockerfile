@@ -1,12 +1,11 @@
-FROM nginx:stable-alpine
+FROM archlinux
 
-RUN mkdir pacman-cache
-ADD ./pacman-cache/ /pacman-cache
-VOLUME /pacman-cache
+RUN pacman -Sy squid --noconfirm
 
-COPY ./mirrors.conf /etc/nginx/
-COPY ./proxy.conf /etc/nginx/nginx.conf
+COPY ./squid.conf /etc/squid/squid.conf
 
-EXPOSE 80/tcp
+EXPOSE 3128/tcp
+VOLUME /var/cache/squid
+VOLUME /var/log/squid
 
-CMD chown -R nginx:nginx /pacman-cache/; nginx -g 'daemon off;'
+CMD /usr/sbin/squid -z --foreground; /usr/sbin/squid --foreground
