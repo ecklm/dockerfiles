@@ -1,35 +1,18 @@
 # Pacman cache in docker
 
-This repo stores the building blocks of a pacman cache server.
-Running it is easy, just run `docker run -it -p 80:80 ecklm/pacman-cache`
+This repo stores a proxy to cache ArchLinux packages.
+Running it is easy, just run `docker run -it -p 3128:3128 ecklm/pacman-cache`
 to see it working live.
 
-Once you have your server running, add it to the mirrorlist.
+Once you have your server running, make your system use it as a proxy. You can
+either use the `http_proxy` environment variable or add the following option to
+your `/etc/pacman.conf` file.
 ```
-Server = http://yourdomain.com/$repo/os/$arch
-```
-
-## Adding mirrors
-
-You can specify which mirrors to use if you overwrite (either by copying
-or mounting) the config file under `/etc/nginx/mirrors.conf` with something
-like this:
-
-```nginx
-upstream mirrors {
-	server mirror1.com;
-	server mirror2.com;
-	server mirror3.com backup;
-}
+[options]
+XferCommand = /usr/bin/curl --proxy http://your-servers-ip:3128 -L --progress-bar --write-out "%{stderr}%{url_effective} %{size_download} HTTP/%{http_version} %{response_code}\n" -C - -f -o %o %u
 ```
 
-To find the most optimal mirrors to location, I recommend you to run
-`docker run -it ecklm/pacman-rankmirrors -p http -v 4` which will (after a long
-time) print you the top servers in the order of download speed. For more info,
-see [the relevant docker registry entry](https://hub.docker.com/r/ecklm/pacman-rankmirrors).
+## Missing features
 
-**Note 1:** The current configuration only works with mirrors responsive to
-requests of the following format `/archlinux/$repo/os/$arch`.
-
-**Note 2:** Unfortunately, the current solution only works with mirrors accepting *HTTP* connections
-and -- as far as I understood -- requests without a specific hostname.
+- HTTPS is not supported at the moment. It will work, but it won't cached.
+- The output of pacman will be much less readable this way.
